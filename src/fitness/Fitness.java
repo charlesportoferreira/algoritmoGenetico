@@ -11,36 +11,47 @@ package fitness;
  */
 public class Fitness {
 
-    private final double []dados;
-    private final int dimensao;
+    private final double[] dados;
+   // private final int dimensao;
 
-    
-    
-    public Fitness(double []dados,int dimensao) {
+    public Fitness(double[] dados) {
         this.dados = dados;
-        this.dimensao = dimensao;
+        //this.dimensao = dimensao;
     }
 
     public double getSphereEvaluator() {
+//        dados[0] = 0.02;
+//        dados[1] = -0.01;
+//        dados[2] = 0.02;
+//        dados[3] = -0.02;
+//        dados[4] = 0.06;
         double fitness = 0.0;
         for (Double dado : dados) {
-            fitness += dado;
+            fitness += Math.pow(dado, 2);
         }
-        
-        return Math.round(fitness * 100.0) / 100.0;
-    }
-    
-    
-    public double getGriewankEvaluator(){
-        throw  new RuntimeException("Not implemented yet");
+
+        return fitness ;
     }
 
-    public double getRastriginEvaluator(){
+    public double getGriewankEvaluator() {
+        double somatorio=0;
+        
+        for (double var : dados) {
+             somatorio += (Math.pow(var,2))/4000; 
+        }
+        double produtorio = 1;
+        for(int i = 0; i < dados.length; i++){
+            produtorio *= Math.cos(dados[i]/Math.sqrt(i+1));
+        }
+        return 1 + somatorio - produtorio;
+    }
+
+    public double getRastriginEvaluator() {
         throw new RuntimeException("Not implemented yet");
     }
-    
-    public double getRosenbrockEvaluator(){
+
+    public double getRosenbrockEvaluator() {
         throw new RuntimeException("Not implemented yet");
     }
-    
+
 }

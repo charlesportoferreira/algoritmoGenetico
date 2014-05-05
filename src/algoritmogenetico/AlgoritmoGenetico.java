@@ -88,7 +88,7 @@ public class AlgoritmoGenetico {
 
         System.out.println(Arrays.toString(new Selecao(crs).roleta()));
         System.out.println(Arrays.toString(new Selecao(crs).Torneio()));
-        System.out.println(Arrays.toString(new Selecao(crs).Elitismo()));
+        // System.out.println(Arrays.toString(new Selecao(crs).Elitismo(10)));
         System.exit(0);
 
         //double cromossomos[][] = new Cruzamento(cromossomo1,cromossomo2).mediaPonderada(0.3);
@@ -98,8 +98,8 @@ public class AlgoritmoGenetico {
             System.out.println(Arrays.toString(cr));
         }
 
-        System.out.println(new Fitness(cromossomo1, 5).getSphereEvaluator());
-        System.out.println(new Fitness(cromossomo2, 5).getSphereEvaluator());
+        System.out.println(new Fitness(cromossomo1).getSphereEvaluator());
+        System.out.println(new Fitness(cromossomo2).getSphereEvaluator());
 
     }
 
@@ -115,19 +115,17 @@ public class AlgoritmoGenetico {
             cromossomos.add(cr);
         }
 
-//        for (double[] cr : cromossomos) {
-//            System.out.println(Arrays.toString(cr));
-//        }
+
     }
 
     public void executaCrossover() {
         ArrayList<double[]> novaPopulacao = new ArrayList<>(tamanhoPopulacao);
-        for (int i = 0; i < tamanhoPopulacao - 1; i = i + 2) {
+        for (int i = 0; i < tamanhoPopulacao * 2 - 1; i = i + 2) {
             int pai1 = 0 + (int) (Math.random() * (tamanhoPopulacao - 0));
             int pai2 = 0 + (int) (Math.random() * (tamanhoPopulacao - 0));
             int corte1 = 0 + (int) (Math.random() * (2 - 0));
             int corte2 = corte1 + (int) (Math.random() * (dimensao - corte1));
-            double[][] filhos = new Cruzamento(cromossomos.get(pai1), cromossomos.get(pai2)).CX(2, dimensao/2);
+            double[][] filhos = new Cruzamento(cromossomos.get(pai1), cromossomos.get(pai2)).CX(2, dimensao / 2);
             novaPopulacao.add(filhos[0]);
             novaPopulacao.add(filhos[1]);
         }
@@ -136,44 +134,34 @@ public class AlgoritmoGenetico {
             novaPopulacao.add(cromossomos.get(individuoAleatorio));
         }
         cromossomos = novaPopulacao;
-//        for (double[] cr : cromossomos) {
-//            System.out.println(Arrays.toString(cr));
-//        }
     }
 
     public void executaMutacao() {
         int rand1 = 0 + (int) (Math.random() * (tamanhoPopulacao - 0));
         new Mutacao(cromossomos.get(rand1)).insereRuido(min, max);
 
-//        for (double[] cr : cromossomos) {
-//            System.out.println(Arrays.toString(cr));
-//        }
     }
 
     public void executaSelecao() {
         ArrayList<double[]> popSelecionada = new ArrayList<>();
-        for (int i = 0; i < tamanhoPopulacao; i++) {
-            popSelecionada.add(new Selecao(cromossomos).Elitismo());
-        }
+        
+        popSelecionada.addAll(new Selecao(cromossomos).Elitismo(tamanhoPopulacao));
+        
         cromossomos = popSelecionada;
-//        for (double[] cr : cromossomos) {
-//            System.out.println(Arrays.toString(cr));
-//        }
     }
 
     public double avaliaSolucao() {
         double solucaoAtual;
-        double[] cromossomoLocal = new double[5];
         for (double[] cr : cromossomos) {
-            cromossomoLocal = cr;
-            solucaoAtual = new Fitness(cr, 5).getSphereEvaluator();
+            //solucaoAtual = new Fitness(cr).getSphereEvaluator();
+            solucaoAtual = new Fitness(cr).getGriewankEvaluator();
             if (solucaoAtual < melhorSolucao) {
                 melhorSolucao = solucaoAtual;
                 cromossomoEscolhido = cr;
             }
         }
-        System.out.println("Melhor solucao ate agora: " + melhorSolucao );
-        //System.out.println("Melhor solucao ate agora: " + melhorSolucao + " " + Arrays.toString(cromossomoLocal));
+        //System.out.println("Melhor solucao ate agora: " + melhorSolucao );
+        System.out.println("Melhor solucao ate agora: " + melhorSolucao + " " + Arrays.toString(cromossomoEscolhido));
         return melhorSolucao;
     }
 

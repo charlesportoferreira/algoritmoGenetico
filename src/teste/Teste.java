@@ -16,12 +16,12 @@ import java.util.Arrays;
 public class Teste {
     public static void main(String args[]){
         double solucao = 2000000;
-        AlgoritmoGenetico ag = new AlgoritmoGenetico(50, -5.12, 5.12);
+        AlgoritmoGenetico ag = new AlgoritmoGenetico(10, -600, 600);
         ag.inicializaCromossomo();
-        for (int i = 0; i < 10000; i++) {
+        for (int i = 0; i < 1000000; i++) {
             ag.executaCrossover();
-            ag.executaMutacao();
             ag.executaSelecao();
+            ag.executaMutacao();
             solucao = ag.avaliaSolucao();
             if (solucao == 0.0) {
                 System.out.println("Achei a melhor solucao!!!!!!!!!!!!!: " + solucao);
