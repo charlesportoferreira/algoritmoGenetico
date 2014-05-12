@@ -3,25 +3,30 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-
 package teste;
 
 import algoritmogenetico.AlgoritmoGenetico;
 import java.util.Arrays;
+import fitness.Fitness;
+import jplot.JPlot;
 
 /**
  *
  * @author charles
  */
 public class Teste {
-    public static void main(String args[]){
-        double solucao = 2000000;
-        AlgoritmoGenetico ag = new AlgoritmoGenetico(10, -600, 600);
+
+    public static void main(String args[]) {
+        
+       
+        double solucao = 12345.12345;
+
+        AlgoritmoGenetico ag = new AlgoritmoGenetico(10, -600, 600, Fitness.GRIEWANK_EVALUATOR);
         ag.inicializaCromossomo();
-        for (int i = 0; i < 1000000; i++) {
+        for (int i = 0; i < 100000; i++) {
             ag.executaCrossover();
             ag.executaSelecao();
-            ag.executaMutacao();
+           ag.executaMutacao();
             solucao = ag.avaliaSolucao();
             if (solucao == 0.0) {
                 System.out.println("Achei a melhor solucao!!!!!!!!!!!!!: " + solucao);

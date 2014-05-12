@@ -7,20 +7,22 @@ import java.util.List;
 public class Selecao {
 
     List<double[]> cromossomos;
+    int funcaoFitness;
 
-    public Selecao(List<double[]> cromossomos) {
+    public Selecao(List<double[]> cromossomos, int funcaoFitness) {
         this.cromossomos = cromossomos;
+        this.funcaoFitness = funcaoFitness;
     }
 
-    public double[] roleta() {
+    public static List<Cromossomo> roleta(List<Cromossomo> cromossomos, int nElementos) {
         int dimensao = cromossomos.size();
         double fitnessTotal = 0;
         double[] fitness = new double[dimensao];
 
         //pegar o primeiro fitness como menor temporariamente
-        double menorFitness = Math.round(1 / (new Fitness(cromossomos.get(0)).getSphereEvaluator()) * 100.0) / 100.0;
+        double menorFitness = 1 / cromossomos.get(0).getFitness();
         for (int i = 0; i < dimensao; i++) {
-            double fitnessAtual = Math.round(1 / (new Fitness(cromossomos.get(i)).getSphereEvaluator()) * 100.0) / 100.0;
+            double fitnessAtual = 1 / cromossomos.get(i).getFitness();
             if (fitnessAtual < menorFitness) {
                 menorFitness = fitnessAtual;
             }
@@ -33,15 +35,20 @@ public class Selecao {
             fitnessTotal += fitness[i];
             fitness[i] = fitnessTotal;
         }
-
-        double rand = 0 + (Math.random() * ((fitnessTotal - 0)));
-        for (int i = 0; i < dimensao; i++) {
-            if (rand <= fitness[i]) {
-                return cromossomos.get(i);
+        ArrayList<Cromossomo> cromossomosSelecionados = new ArrayList<>();
+        for (int i = 0; i < nElementos; i++) {
+            double rand = 0 + (Math.random() * ((fitnessTotal - 0)));
+            for (int j = 0; j < dimensao; j++) {
+                if (rand <= fitness[j]) {
+                    cromossomosSelecionados.add(cromossomos.get(i));
+                }
             }
         }
-
-        throw new RuntimeException("Nao foi achado o fitness na roleta");
+        if(cromossomosSelecionados.size() != nElementos){
+             //throw new RuntimeException("Nao foi achado o fitness na roleta");
+        }
+        return cromossomosSelecionados;
+       
 
     }
 
@@ -49,9 +56,9 @@ public class Selecao {
         int dimensao = cromossomos.size();
         int rand1 = 0 + (int) (Math.random() * (((dimensao - 1) - 0) + 1));
         int rand2 = 0 + (int) (Math.random() * (((dimensao - 1) - 0) + 1));
-        double fit1 = 1 / new Fitness(cromossomos.get(rand1)).getSphereEvaluator();
+        double fit1 = 1 / new Fitness(cromossomos.get(rand1), funcaoFitness).getFitness();
         fit1 = Math.round(fit1 * 100.0) / 100.0;
-        double fit2 = 1 / new Fitness(cromossomos.get(rand2)).getSphereEvaluator();
+        double fit2 = 1 / new Fitness(cromossomos.get(rand2), funcaoFitness).getFitness();
         fit2 = Math.round(fit2 * 100.0) / 100.0;
         if (fit1 > fit2) {
             // System.out.println(fit1 + " : " + fit2);
@@ -60,29 +67,27 @@ public class Selecao {
         return cromossomos.get(rand2);
     }
 
-    public List<double[]> Elitismo(int nElementos) {
-        List<double[]> cromo = new ArrayList<>(cromossomos.subList(0, cromossomos.size()));
+    public static List<Cromossomo> Elitismo(List<Cromossomo> cromossomos, int nElementos) {
+        List<Cromossomo> copias = new ArrayList<>(cromossomos.subList(0, cromossomos.size()));
         cromossomos.clear();
         double fitnessAtual;
         double bestFitness;
-        int posicaoMelhorFitness = 0;
+        int posicaoMelhorFitness;
         for (int j = 0; j < nElementos; j++) {
             //iniciliaza o bestFitness com o primeiro fitness temporariamente
-            //bestFitness = 1 / new Fitness(cromo.get(0)).getSphereEvaluator();
-            bestFitness = 1 / new Fitness(cromo.get(0)).getGriewankEvaluator();
+            bestFitness = 1 / copias.get(0).getFitness();
             posicaoMelhorFitness = 0;
             int i = 0;
-            while (i < cromo.size()) {
-                //fitnessAtual = 1 / new Fitness(cromo.get(i)).getSphereEvaluator();
-                fitnessAtual = 1 / new Fitness(cromo.get(i)).getGriewankEvaluator();
+            while (i < copias.size()) {
+                fitnessAtual = 1 / copias.get(i).getFitness();
                 if (fitnessAtual > bestFitness) {
                     bestFitness = fitnessAtual;
                     posicaoMelhorFitness = i;
                 }
                 i++;
             }
-            cromossomos.add(cromo.get(posicaoMelhorFitness));
-            cromo.remove(posicaoMelhorFitness);
+            cromossomos.add(copias.get(posicaoMelhorFitness));
+            copias.remove(posicaoMelhorFitness);
         }
         return cromossomos;
     }

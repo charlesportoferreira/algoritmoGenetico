@@ -23,6 +23,7 @@ public class Mutacao {
         int rand = 0 + (int) (Math.random() * (((dimensao - 1) - 0) + 1));
         double ruido = min + (Math.random() * ((max - (min))));
         cromossomo[rand] = Math.round(ruido * 100.0) / 100.0;
+       // System.out.println("!!!!!!!!!               " + Math.round(ruido * 100.0) / 100.0 + "      !!!!!!!!!!!");
     }
 
 }
