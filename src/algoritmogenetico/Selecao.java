@@ -2,6 +2,7 @@ package algoritmogenetico;
 
 import fitness.Fitness;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 public class Selecao {
@@ -44,11 +45,10 @@ public class Selecao {
                 }
             }
         }
-        if(cromossomosSelecionados.size() != nElementos){
-             //throw new RuntimeException("Nao foi achado o fitness na roleta");
+        if (cromossomosSelecionados.size() != nElementos) {
+            //throw new RuntimeException("Nao foi achado o fitness na roleta");
         }
         return cromossomosSelecionados;
-       
 
     }
 
@@ -68,28 +68,31 @@ public class Selecao {
     }
 
     public static List<Cromossomo> Elitismo(List<Cromossomo> cromossomos, int nElementos) {
-        List<Cromossomo> copias = new ArrayList<>(cromossomos.subList(0, cromossomos.size()));
-        cromossomos.clear();
-        double fitnessAtual;
-        double bestFitness;
-        int posicaoMelhorFitness;
-        for (int j = 0; j < nElementos; j++) {
-            //iniciliaza o bestFitness com o primeiro fitness temporariamente
-            bestFitness = 1 / copias.get(0).getFitness();
-            posicaoMelhorFitness = 0;
-            int i = 0;
-            while (i < copias.size()) {
-                fitnessAtual = 1 / copias.get(i).getFitness();
-                if (fitnessAtual > bestFitness) {
-                    bestFitness = fitnessAtual;
-                    posicaoMelhorFitness = i;
-                }
-                i++;
-            }
-            cromossomos.add(copias.get(posicaoMelhorFitness));
-            copias.remove(posicaoMelhorFitness);
-        }
-        return cromossomos;
+        Collections.sort(cromossomos, new ComparadorCromossomo());
+        List<Cromossomo> copias = new ArrayList<>(cromossomos.subList(0, nElementos));
+       // List<Cromossomo> copias = new ArrayList<>(cromossomos.subList(0, cromossomos.size()));
+//        cromossomos.clear();
+//        double fitnessAtual;
+//        double bestFitness;
+//        int posicaoMelhorFitness;
+//        for (int j = 0; j < nElementos; j++) {
+//            //iniciliaza o bestFitness com o primeiro fitness temporariamente
+//            bestFitness = 1 / copias.get(0).getFitness();
+//            posicaoMelhorFitness = 0;
+//            int i = 0;
+//            while (i < copias.size()) {
+//                fitnessAtual = 1 / copias.get(i).getFitness();
+//                if (fitnessAtual > bestFitness) {
+//                    bestFitness = fitnessAtual;
+//                    posicaoMelhorFitness = i;
+//                }
+//                i++;
+//            }
+//            cromossomos.add(copias.get(posicaoMelhorFitness));
+//            copias.remove(posicaoMelhorFitness);
+//        }
+        // return cromossomos;
+        return copias;
     }
 
     private double min(double[] vetor) {

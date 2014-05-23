@@ -26,9 +26,9 @@ public class Cruzamento {
         for (int i = 0; i < genesPai1.length; i++) {
 
             filho1[i] = fatorPonderacao * genesPai1[i] + (1 - fatorPonderacao) * genesPai2[i];
-            filho1[i] = Math.round(filho1[i] * 100.0) / 100.0;
+            filho1[i] = Math.round(filho1[i] * 10000.0) / 10000.0;
             filho2[i] = (1 - fatorPonderacao) * genesPai1[i] + fatorPonderacao * genesPai2[i];
-            filho2[i] = Math.round(filho2[i] * 100.0) / 100.0;
+            filho2[i] = Math.round(filho2[i] * 10000.0) / 10000.0;
         }
         cromo[0] = filho1;
         cromo[1] = filho2;

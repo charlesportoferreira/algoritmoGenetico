@@ -11,7 +11,7 @@ import fitness.Fitness;
  *
  * @author charleshenriqueportoferreira
  */
-public class Cromossomo {
+public class Cromossomo  {
 
     private double[] genes;
     private double fitness;
@@ -37,7 +37,7 @@ public class Cromossomo {
     public void inicializarGenes(double min, double max) {
         for (int i = 0; i < genes.length; i++) {
             double random = min + (Math.random() * ((max - (min))));
-            genes[i] = Math.round(random * 100.0) / 100.0;
+            genes[i] = Math.round(random * 10000.0) / 10000.0;
         }
         calculaFitness(funcaoFitness);
     }
@@ -65,4 +65,6 @@ public class Cromossomo {
     public int getDimensao(){
         return genes.length;
     }
+
+    
 }

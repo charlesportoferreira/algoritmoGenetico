@@ -23,7 +23,45 @@ public class Mutacao {
         int rand = 0 + (int) (Math.random() * (((dimensao - 1) - 0) + 1));
         double ruido = min + (Math.random() * ((max - (min))));
         cromossomo[rand] = Math.round(ruido * 100.0) / 100.0;
-       // System.out.println("!!!!!!!!!               " + Math.round(ruido * 100.0) / 100.0 + "      !!!!!!!!!!!");
+        // System.out.println("!!!!!!!!!               " + Math.round(ruido * 100.0) / 100.0 + "      !!!!!!!!!!!");
+    }
+
+    public void mutacaoUnidimensional(double alpha) {
+      
+
+        int[] mascara = new int[cromossomo.length];
+        int rand;
+
+        for (int i = 0; i < cromossomo.length; i++) {
+            rand = 0 + (int) (Math.random() * ((2 - 0) + 1));
+            rand--;
+            mascara[i] = rand;
+        }
+        for (int i = 0; i < cromossomo.length; i++) {
+            cromossomo[i] = cromossomo[i] + alpha * mascara[i];
+        }
+        //System.out.println(rand);
+    }
+
+    public void mutacaoUnidimensional(double alpha, double[] melhorCromossomo) {
+        int[] mascara = new int[cromossomo.length];
+        int rand;
+
+        for (int i = 0; i < cromossomo.length; i++) {
+            rand = 0 + (int) (Math.random() * ((2 - 0) + 1));
+            rand--;
+            mascara[i] = rand;
+        }
+        for (int i = 0; i < cromossomo.length; i++) {
+            cromossomo[i] = melhorCromossomo[i] + alpha * mascara[i];
+        }
+        //System.out.println(rand);
+    }
+
+    public static void main(String args[]) {
+        for (int i = 0; i < 10; i++) {
+            new Mutacao(new double[10]).mutacaoUnidimensional(i);
+        }
     }
 
 }

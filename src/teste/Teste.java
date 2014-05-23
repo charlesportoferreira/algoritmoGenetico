@@ -8,7 +8,6 @@ package teste;
 import algoritmogenetico.AlgoritmoGenetico;
 import java.util.Arrays;
 import fitness.Fitness;
-import jplot.JPlot;
 
 /**
  *
@@ -17,16 +16,16 @@ import jplot.JPlot;
 public class Teste {
 
     public static void main(String args[]) {
-        
-       
+
         double solucao = 12345.12345;
 
-        AlgoritmoGenetico ag = new AlgoritmoGenetico(10, -600, 600, Fitness.GRIEWANK_EVALUATOR);
+        AlgoritmoGenetico ag = new AlgoritmoGenetico(300, -5.12, 5.12, Fitness.SPHERE_EVALUATOR);
         ag.inicializaCromossomo();
-        for (int i = 0; i < 100000; i++) {
+        
+        for (int i = 0; i < 300000; i++) {
             ag.executaCrossover();
+            ag.executaMutacao();
             ag.executaSelecao();
-           ag.executaMutacao();
             solucao = ag.avaliaSolucao();
             if (solucao == 0.0) {
                 System.out.println("Achei a melhor solucao!!!!!!!!!!!!!: " + solucao);

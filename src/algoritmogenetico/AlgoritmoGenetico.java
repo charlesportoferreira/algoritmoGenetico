@@ -16,10 +16,11 @@ public class AlgoritmoGenetico {
     private double melhorSolucao;
     private Cromossomo cromossomoEscolhido;
     private final int funcaoFitness;
+    private int count = 0;
 
     public AlgoritmoGenetico(int dimensao, double min, double max, int funcaoFitness) {
         this.dimensao = dimensao;
-        tamanhoPopulacao = 1000;
+        tamanhoPopulacao = 200;
         cromossomos = new ArrayList<>(tamanhoPopulacao);
         this.min = min;
         this.max = max;
@@ -48,7 +49,7 @@ public class AlgoritmoGenetico {
             Cromossomo filho1 = new Cromossomo(dimensao, funcaoFitness);
             Cromossomo filho2 = new Cromossomo(dimensao, funcaoFitness);
             if (probCruzamento > 25) {
-                double[][] genesFilhos = Cruzamento.mediaPonderada(cromossomos.get(pai1).getGenes(), cromossomos.get(pai2).getGenes(), 0.2);
+                double[][] genesFilhos = Cruzamento.mediaPonderada(cromossomos.get(pai1).getGenes(), cromossomos.get(pai2).getGenes(), 0.3);
                 filho1.setGenes(genesFilhos[0]);
                 filho2.setGenes(genesFilhos[1]);
             } else {
@@ -76,18 +77,42 @@ public class AlgoritmoGenetico {
             probMax = max;
 
         }
-        for (int i = 0; i < 50; i++) {
+        int qtde = (int) (0.3 * (tamanhoPopulacao));
+        // System.out.println("!!!!!!!!!!!!!!!!!" + qtde + "!!!!!!!!!!!!!!!!!!!!!!!");
+        for (int i = 0; i < 0.8 * qtde; i++) {
             int probMutacao = 0 + (int) (Math.random() * (100 - 0));
             if (probMutacao > 25) {
                 int rand1 = 0 + (int) (Math.random() * (tamanhoPopulacao - 0));
                 new Mutacao(cromossomos.get(rand1).getGenes()).insereRuido(probMin, probMax);
             }
         }
-        for (int i = 0; i < 50; i++) {
+
+        for (int i = 0; i < 0.2*qtde; i++) {
             int probMutacao = 0 + (int) (Math.random() * (100 - 0));
             if (probMutacao > 25) {
                 int rand1 = 0 + (int) (Math.random() * (tamanhoPopulacao - 0));
                 new Mutacao(cromossomos.get(rand1).getGenes()).insereRuido(min, max);
+            }
+        }
+        double alpha = 0.1;
+        if (cromossomoEscolhido != null) {
+            alpha = 1 / cromossomoEscolhido.getFitness();
+        }
+
+//        for (int i = 0; i < 0.1*qtde; i++) {
+//            int probMutacao = 0 + (int) (Math.random() * (100 - 0));
+//            if (probMutacao > 25) {
+//                int rand1 = 0 + (int) (Math.random() * (tamanhoPopulacao - 0));
+//                new Mutacao(cromossomos.get(rand1).getGenes()).mutacaoUnidimensional(0.1);
+//            }
+//        }
+        if (cromossomoEscolhido != null) {
+            for (int i = 0; i <  0.1*qtde; i++) {
+                int probMutacao = 0 + (int) (Math.random() * (100 - 0));
+                if (probMutacao > 25) {
+                    int rand1 = 0 + (int) (Math.random() * (tamanhoPopulacao - 0));
+                    new Mutacao(cromossomos.get(rand1).getGenes()).mutacaoUnidimensional(0.01, cromossomoEscolhido.getGenes());
+                }
             }
         }
     }
@@ -103,15 +128,17 @@ public class AlgoritmoGenetico {
     public double avaliaSolucao() {
         double solucaoAtual;
         double bestFit = -888888;
-        for (Cromossomo cromossomo : cromossomos) {
-            solucaoAtual = 1 / cromossomo.getFitness();
-            if (solucaoAtual > bestFit) {
-                bestFit = solucaoAtual;
-                cromossomoEscolhido = cromossomo;
-            }
-        }
+//        for (Cromossomo cromossomo : cromossomos) {
+//            solucaoAtual = 1 / cromossomo.getFitness();
+//            if (solucaoAtual > bestFit) {
+//                bestFit = solucaoAtual;
+//                cromossomoEscolhido = cromossomo;
+//            }
+//        }
+        cromossomoEscolhido = cromossomos.get(0);
+        count++;
         //System.out.println("Melhor solucao ate agora: " + melhorSolucao );
-        System.out.println("Melhor solucao ate agora: " + cromossomoEscolhido.getFitness() + " " + Arrays.toString(cromossomoEscolhido.getGenes()));
+        System.out.println(count + " Melhor solucao ate agora: " + cromossomoEscolhido.getFitness() + " " + Arrays.toString(cromossomoEscolhido.getGenes()));
         return cromossomoEscolhido.getFitness();
     }
 
