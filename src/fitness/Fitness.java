@@ -24,11 +24,11 @@ public class Fitness {
     public Fitness(double[] dados, int funcaoFitness) {
         this.dados = dados;
         this.funcaoFitness = funcaoFitness;
-        
+
     }
 
     public double getFitness() {
-        if(dados== null){
+        if (dados == null) {
             throw new RuntimeException("Dados Null");
         }
         switch (funcaoFitness) {
@@ -39,14 +39,13 @@ public class Fitness {
             case 3:
                 return getRastriginEvaluator();
             case 4:
-                return getRosenbrockEvaluator();
+                //return getRosenbrockEvaluator();
+                return f();
             default:
                 break;
         }
         throw new RuntimeException("Nenhuma funcao de fitness selecionada");
     }
-
-    
 
     public double getSphereEvaluator() {
 
@@ -80,16 +79,30 @@ public class Fitness {
 
     }
 
+    public double f() {
+        //int N = x.length();
+        int N = dados.length;
+        double f = 0.0;
+        for (int i = 0; i < N - 1; i++) {
+            //double xi = x.get(i);
+             double xi = dados[i];
+            //f += Math.pow(1.0 - xi, 2) + 100.0 * Math.pow(x.get(i + 1) - xi * xi, 2);
+            f += Math.pow(1.0 - xi, 2) + 100.0 * Math.pow(dados[(i + 1)] - xi * xi, 2);
+        }
+
+        return f;
+    }
+
     public double getRosenbrockEvaluator() {
 
         double somatorio = 0;
-        for (int i = 0; i < dados.length-1;i++) {
+        for (int i = 0; i < dados.length - 1; i++) {
             double exp1 = Math.pow(dados[i], 2);
-            double exp2 = Math.pow(exp1 - dados[i+1], 2);
+            double exp2 = Math.pow(exp1 - dados[i + 1], 2);
             double exp3 = Math.pow((dados[i] - 1), 2);
             somatorio += 100 * (exp2) + exp3;
         }
-        
+
         return somatorio;
 
     }

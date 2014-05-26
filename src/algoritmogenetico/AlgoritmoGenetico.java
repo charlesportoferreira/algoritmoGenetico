@@ -22,10 +22,12 @@ public class AlgoritmoGenetico {
     int indiceConvergencia = 0;
     double fitnessAtual;
     boolean enable;
+    double media;
+    double alpha = 0.1;
 
     public AlgoritmoGenetico(int dimensao, double min, double max, int funcaoFitness) {
         this.dimensao = dimensao;
-        tamanhoPopulacao = 50;
+        tamanhoPopulacao = 100;
         cromossomos = new ArrayList<>(tamanhoPopulacao);
         this.min = min;
         this.max = max;
@@ -88,7 +90,7 @@ public class AlgoritmoGenetico {
             gama = 0.1;
             indiceConvergencia = 0;
         }
-        if (indiceConvergencia >= 50 && gama >= 0.7) {
+        if (indiceConvergencia >= 25 && gama >= 0.7) {
             gama = gama + 0.1;
             indiceConvergencia = 0;
         }
@@ -109,15 +111,22 @@ public class AlgoritmoGenetico {
                 new Mutacao(cromossomos.get(rand1).getGenes()).insereRuido(probMin, probMax);
             }
         }
-        if(beta == 0.4){
+        if (beta == 0.4) {
             enable = true;
+            if (alpha == 0.1) {
+                alpha = alpha + 1.0;
+            }
+        } else {
+            enable = false;
+            alpha = 0.1;
         }
         if (enable && dimensao > 10) {
+
             for (int i = 0; i < 0.1 * qtde; i++) {
                 int probMutacao = 0 + (int) (Math.random() * (100 - 0));
                 if (probMutacao > 25) {
                     int rand1 = 0 + (int) (Math.random() * (tamanhoPopulacao - 0));
-                    new Mutacao(cromossomos.get(rand1).getGenes()).insereRuidoGeral(probMin, probMax);
+                    new Mutacao(cromossomos.get(rand1).getGenes()).insereRuidoGeral(media - 0.5, media + 0.5);
                 }
             }
         }
@@ -129,11 +138,10 @@ public class AlgoritmoGenetico {
                 new Mutacao(cromossomos.get(rand1).getGenes()).insereRuido(min, max);
             }
         }
-        double alpha = 0.1;
-        if (cromossomoEscolhido != null) {
-            alpha = 1 / cromossomoEscolhido.getFitness();
-        }
 
+//        if (cromossomoEscolhido != null) {
+//            alpha = 1 / cromossomoEscolhido.getFitness();
+//        }
 //        for (int i = 0; i < 0.1*qtde; i++) {
 //            int probMutacao = 0 + (int) (Math.random() * (100 - 0));
 //            if (probMutacao > 25) {
@@ -142,7 +150,7 @@ public class AlgoritmoGenetico {
 //            }
 //        }
         if (cromossomoEscolhido != null) {
-            for (int i = 0; i < 0.1 * qtde; i++) {
+            for (int i = 0; i < alpha * qtde; i++) {
                 int probMutacao = 0 + (int) (Math.random() * (100 - 0));
                 if (probMutacao > 25) {
                     int rand1 = 0 + (int) (Math.random() * (tamanhoPopulacao - 0));
@@ -211,5 +219,13 @@ public class AlgoritmoGenetico {
             }
         }
         return maior;
+    }
+
+    public double getMediaCromossomo() {
+        media = 0;
+        for (double gene : cromossomoEscolhido.getGenes()) {
+            media += gene;
+        }
+        return media / cromossomoEscolhido.getGenes().length;
     }
 }

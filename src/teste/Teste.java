@@ -17,11 +17,21 @@ public class Teste {
 
     public static void main(String args[]) {
 
+       // int dim = Integer.parseInt(args[0]);
+        //double min = Double.parseDouble(args[1]);
+        //double max = Double.parseDouble(args[2]);
+        //int function = Integer.parseInt(args[3]);
+      //  dim = 30;
+       // min = 5.12;
+      //  max = 5.12;
+       // function = 1;
+         
+
         double solucao = 12345.12345;
 
-        AlgoritmoGenetico ag = new AlgoritmoGenetico(3, -2048, 2048, Fitness.ROSEMBROCK_EVALUATOR);
+        AlgoritmoGenetico ag = new AlgoritmoGenetico(30, -600, 600, Fitness.GRIEWANK_EVALUATOR);
         ag.inicializaCromossomo();
-        
+
         for (int i = 0; i < 300000; i++) {
             ag.executaCrossover();
             ag.executaMutacao();
