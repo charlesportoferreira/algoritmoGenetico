@@ -19,7 +19,7 @@ public class Teste {
 
         double solucao = 12345.12345;
 
-        AlgoritmoGenetico ag = new AlgoritmoGenetico(300, -5.12, 5.12, Fitness.SPHERE_EVALUATOR);
+        AlgoritmoGenetico ag = new AlgoritmoGenetico(3, -2048, 2048, Fitness.ROSEMBROCK_EVALUATOR);
         ag.inicializaCromossomo();
         
         for (int i = 0; i < 300000; i++) {

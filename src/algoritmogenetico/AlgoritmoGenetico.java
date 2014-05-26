@@ -17,10 +17,15 @@ public class AlgoritmoGenetico {
     private Cromossomo cromossomoEscolhido;
     private final int funcaoFitness;
     private int count = 0;
+    double beta = 0.1;
+    double gama = 0.1;
+    int indiceConvergencia = 0;
+    double fitnessAtual;
+    boolean enable;
 
     public AlgoritmoGenetico(int dimensao, double min, double max, int funcaoFitness) {
         this.dimensao = dimensao;
-        tamanhoPopulacao = 200;
+        tamanhoPopulacao = 50;
         cromossomos = new ArrayList<>(tamanhoPopulacao);
         this.min = min;
         this.max = max;
@@ -77,17 +82,47 @@ public class AlgoritmoGenetico {
             probMax = max;
 
         }
-        int qtde = (int) (0.3 * (tamanhoPopulacao));
+
+        if (beta < 0.6 && gama >= 0.7) {
+            beta = beta + 0.1;
+            gama = 0.1;
+            indiceConvergencia = 0;
+        }
+        if (indiceConvergencia >= 50 && gama >= 0.7) {
+            gama = gama + 0.1;
+            indiceConvergencia = 0;
+        }
+
+        if (beta == 0.6) {
+            beta = 0.3;
+        }
+        int qtde = (int) (beta * (tamanhoPopulacao));
         // System.out.println("!!!!!!!!!!!!!!!!!" + qtde + "!!!!!!!!!!!!!!!!!!!!!!!");
-        for (int i = 0; i < 0.8 * qtde; i++) {
+
+        if (count % 500 == 0 && gama <= 1.0) {
+            gama = gama + 0.1;
+        }
+        for (int i = 0; i < gama * qtde; i++) {
             int probMutacao = 0 + (int) (Math.random() * (100 - 0));
             if (probMutacao > 25) {
                 int rand1 = 0 + (int) (Math.random() * (tamanhoPopulacao - 0));
                 new Mutacao(cromossomos.get(rand1).getGenes()).insereRuido(probMin, probMax);
             }
         }
+        if(beta == 0.4){
+            enable = true;
+        }
+        if (enable && dimensao > 10) {
+            for (int i = 0; i < 0.1 * qtde; i++) {
+                int probMutacao = 0 + (int) (Math.random() * (100 - 0));
+                if (probMutacao > 25) {
+                    int rand1 = 0 + (int) (Math.random() * (tamanhoPopulacao - 0));
+                    new Mutacao(cromossomos.get(rand1).getGenes()).insereRuidoGeral(probMin, probMax);
+                }
+            }
+        }
 
-        for (int i = 0; i < 0.2*qtde; i++) {
+        for (int i = 0; i < 0.1 * qtde; i++) {
             int probMutacao = 0 + (int) (Math.random() * (100 - 0));
             if (probMutacao > 25) {
                 int rand1 = 0 + (int) (Math.random() * (tamanhoPopulacao - 0));
@@ -107,7 +142,7 @@ public class AlgoritmoGenetico {
 //            }
 //        }
         if (cromossomoEscolhido != null) {
-            for (int i = 0; i <  0.1*qtde; i++) {
+            for (int i = 0; i < 0.1 * qtde; i++) {
                 int probMutacao = 0 + (int) (Math.random() * (100 - 0));
                 if (probMutacao > 25) {
                     int rand1 = 0 + (int) (Math.random() * (tamanhoPopulacao - 0));
@@ -135,10 +170,16 @@ public class AlgoritmoGenetico {
 //                cromossomoEscolhido = cromossomo;
 //            }
 //        }
+
         cromossomoEscolhido = cromossomos.get(0);
+        if (cromossomoEscolhido.getFitness() != fitnessAtual) {
+            fitnessAtual = cromossomoEscolhido.getFitness();
+        } else {
+            indiceConvergencia++;
+        }
         count++;
         //System.out.println("Melhor solucao ate agora: " + melhorSolucao );
-        System.out.println(count + " Melhor solucao ate agora: " + cromossomoEscolhido.getFitness() + " " + Arrays.toString(cromossomoEscolhido.getGenes()));
+        System.out.println(count + " " + beta + " " + gama + " Solucao: " + cromossomoEscolhido.getFitness() + " " + Arrays.toString(cromossomoEscolhido.getGenes()));
         return cromossomoEscolhido.getFitness();
     }
 

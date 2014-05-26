@@ -26,8 +26,17 @@ public class Mutacao {
         // System.out.println("!!!!!!!!!               " + Math.round(ruido * 100.0) / 100.0 + "      !!!!!!!!!!!");
     }
 
+    public void insereRuidoGeral(double min, double max) {
+        for (int i = 0; i < cromossomo.length; i++) {
+            int dimensao = this.cromossomo.length;
+            int rand = 0 + (int) (Math.random() * (((dimensao - 1) - 0) + 1));
+            double ruido = min + (Math.random() * ((max - (min))));
+            cromossomo[rand] = Math.round(ruido * 100.0) / 100.0;
+            // System.out.println("!!!!!!!!!               " + Math.round(ruido * 100.0) / 100.0 + "      !!!!!!!!!!!");
+        }
+    }
+
     public void mutacaoUnidimensional(double alpha) {
-      
 
         int[] mascara = new int[cromossomo.length];
         int rand;
