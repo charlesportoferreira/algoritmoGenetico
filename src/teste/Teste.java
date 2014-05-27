@@ -29,7 +29,7 @@ public class Teste {
 
         double solucao = 12345.12345;
 
-        AlgoritmoGenetico ag = new AlgoritmoGenetico(30, -600, 600, Fitness.GRIEWANK_EVALUATOR);
+        AlgoritmoGenetico ag = new AlgoritmoGenetico(10, -2048, 2048, Fitness.ROSEMBROCK_EVALUATOR);
         ag.inicializaCromossomo();
 
         for (int i = 0; i < 300000; i++) {
