@@ -29,10 +29,10 @@ public class Teste {
 
         double solucao = 12345.12345;
 
-        AlgoritmoGenetico ag = new AlgoritmoGenetico(10, -2048, 2048, Fitness.ROSEMBROCK_EVALUATOR);
+        AlgoritmoGenetico ag = new AlgoritmoGenetico(30, -2048, 2048, Fitness.ROSEMBROCK_EVALUATOR);
         ag.inicializaCromossomo();
 
-        for (int i = 0; i < 300000; i++) {
+        for (int i = 0; i < 500000; i++) {
             ag.executaCrossover();
             ag.executaMutacao();
             ag.executaSelecao();

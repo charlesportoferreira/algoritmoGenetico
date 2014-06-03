@@ -17,8 +17,8 @@ public class AlgoritmoGenetico {
     private Cromossomo cromossomoEscolhido;
     private final int funcaoFitness;
     private int count = 0;
-    double beta = 0.1;
-    double gama = 0.1;
+    double beta = 0.9;
+    double gama = 0.9;
     int indiceConvergencia = 0;
     double fitnessAtual;
     boolean enable;
@@ -27,7 +27,7 @@ public class AlgoritmoGenetico {
 
     public AlgoritmoGenetico(int dimensao, double min, double max, int funcaoFitness) {
         this.dimensao = dimensao;
-        tamanhoPopulacao = 100;
+        tamanhoPopulacao = 50;
         cromossomos = new ArrayList<>(tamanhoPopulacao);
         this.min = min;
         this.max = max;
@@ -77,6 +77,7 @@ public class AlgoritmoGenetico {
     }
 
     public void executaMutacao() {
+        getMediaCromossomo();
         double probMin = getMenorGene();
         double probMax = getMaxGene();
         if (probMin == probMax) {
@@ -90,18 +91,21 @@ public class AlgoritmoGenetico {
             gama = 0.1;
             indiceConvergencia = 0;
         }
-        if (indiceConvergencia >= 25 && gama >= 0.7) {
+        if (indiceConvergencia >= 25 && gama >= 0.7)  {
             gama = gama + 0.1;
+            //if(gama >= 0.3){
+              //  gama = 0.1;
+            //}
             indiceConvergencia = 0;
         }
 
-        if (beta == 0.6) {
+        if (beta >= 0.6 ) {
             beta = 0.3;
         }
         int qtde = (int) (beta * (tamanhoPopulacao));
         // System.out.println("!!!!!!!!!!!!!!!!!" + qtde + "!!!!!!!!!!!!!!!!!!!!!!!");
 
-        if (count % 500 == 0 && gama <= 1.0) {
+        if (count %500 == 0 && gama <= 7.0) {
             gama = gama + 0.1;
         }
         for (int i = 0; i < gama * qtde; i++) {
@@ -111,10 +115,11 @@ public class AlgoritmoGenetico {
                 new Mutacao(cromossomos.get(rand1).getGenes()).insereRuido(probMin, probMax);
             }
         }
-        if (beta == 0.4) {
+        if (beta == 0.4 && gama <= 0.5) {
             enable = true;
             if (alpha == 0.1) {
-                alpha = alpha + 1.0;
+                alpha = alpha +0.2;
+                
             }
         } else {
             enable = false;
@@ -222,6 +227,9 @@ public class AlgoritmoGenetico {
     }
 
     public double getMediaCromossomo() {
+        if(count == 0){
+            return 0;
+        }
         media = 0;
         for (double gene : cromossomoEscolhido.getGenes()) {
             media += gene;
